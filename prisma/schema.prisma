@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Generator configuration for Prisma client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Data source configuration for MongoDB
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier for the user
+  name            String? // User's name
+  username        String?   @unique // User's unique username
+  bio             String? // User's bio
+  email           String?   @unique // User's unique email address
+  emailVerified   DateTime? // Date and time when the user's email was verified
+  image           String? // URL of user's profile image
+  coverImage      String? // URL of user's cover image
+  profileImage    String? // URL of user's profile image
+  hashedPassword  String? // Hashed password of the user
+  createdAt       DateTime  @default(now()) // Date and time when the user was created
+  updatedat       DateTime  @updatedAt // Date and time when the user was last updated
+  followingIds    String[]  @db.ObjectId // Array of user IDs that this user is following
+  hasNotification Boolean? // Flag to indicate if the user has any unread notifications
+
+  // One-to-many relationship between User and Post models
+  posts         Post[]
+  // One-to-many relationship between User and Comment models
+  comments      Comment[]
+  // One-to-many relationship between User and Notification models
+  notifications Notification[]
+}
+
+// Post model
+model Post {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier for the post
+  body      String // Body of the post
+  createdAt DateTime @default(now()) // Date and time when the post was created
+  updatedAt DateTime @updatedAt // Date and time when the post was last updated
+  userId    String   @db.ObjectId // ID of the user who created the post
+  likedIds  String[] @db.ObjectId // Array of user IDs who liked the post
+
+  // Many-to-one relationship between Post and User models
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // One-to-many relationship between Post and Comment models
+  comments Comment[]
+}
+
+// Comment model
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier for the comment
+  body      String // Body of the comment
+  createdAt DateTime @default(now()) // Date and time when the comment was created
+  updatedAt DateTime @updatedAt // Date and time when the comment was last updated
+  userId    String   @db.ObjectId // ID of the user who created the comment
+  postId    String   @db.ObjectId // ID of the post that the comment belongs to
+
+  // Many-to-one relationship between Comment and User models
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Many-to-one relationship between Comment and Post models
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// Notification model
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier for the notification
+  body      String // Body of the notification
+  userId    String   @db.ObjectId // ID of the user who received the notification
+  createdAt DateTime @default(now()) // Date and time when the notification was created
+
+  // Many-to-one relationship between Notification and User models
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
