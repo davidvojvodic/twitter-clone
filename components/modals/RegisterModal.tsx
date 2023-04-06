@@ -8,15 +8,18 @@ import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
 const RegisterModal = () => {
+  // Custom hooks for opening/closing login and register modals
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
 
+  // State variables for form inputs and loading state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Function to toggle between login and register modals
   const onToggle = useCallback(() => {
     if (isLoading) {
       return;
@@ -26,19 +29,22 @@ const RegisterModal = () => {
     loginModal.onOpen();
   }, [isLoading, registerModal, loginModal]);
 
+  // Function to handle form submission
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
+      // Send registration data to server
       await axios.post("/api/register", { email, password, username, name });
 
+      // Display success message and sign user in
       toast.success("Account created.");
-
       signIn("credentials", {
         email,
         password,
       });
 
+      // Close register modal
       registerModal.onClose();
     } catch (error) {
       console.log(error);
@@ -48,6 +54,7 @@ const RegisterModal = () => {
     }
   }, [registerModal, email, password, username, name]);
 
+  // JSX for modal body
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
@@ -78,6 +85,7 @@ const RegisterModal = () => {
     </div>
   );
 
+  // JSX for modal footer
   const footerContent = (
     <div className="text-neutral-400 text-center mt-4">
       <p>
@@ -92,6 +100,7 @@ const RegisterModal = () => {
     </div>
   );
 
+  // Render modal component with props
   return (
     <Modal
       disabled={isLoading}

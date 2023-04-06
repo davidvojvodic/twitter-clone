@@ -8,9 +8,11 @@ interface HeaderProps {
   showBackArrow?: boolean;
 }
 
+// Header component with optional back arrow
 const Header: React.FC<HeaderProps> = ({ label, showBackArrow }) => {
   const router = useRouter();
 
+  // Function to handle back arrow click
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);

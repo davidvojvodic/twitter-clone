@@ -1,25 +1,26 @@
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useEditModal from "@/hooks/useEditModal";
-import useUser from "@/hooks/useUser";
-import React, { useState, useEffect, useCallback } from "react";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import Modal from "../Modal";
-import Input from "../Input";
-import ImageUpload from "../ImageUpload";
+import useCurrentUser from "@/hooks/useCurrentUser"; // import custom hook to fetch current user data
+import useEditModal from "@/hooks/useEditModal"; // import custom hook to handle edit modal state
+import useUser from "@/hooks/useUser"; // import custom hook to fetch user data
+import React, { useState, useEffect, useCallback } from "react"; // import necessary React components
+import { toast } from "react-hot-toast"; // import toast notification library
+import axios from "axios"; // import axios library for HTTP requests
+import Modal from "../Modal"; // import custom modal component
+import Input from "../Input"; // import custom input component
+import ImageUpload from "../ImageUpload"; // import custom image upload component
 
 const EditModal = () => {
-  const { data: currentUser } = useCurrentUser();
-  const { mutate: mutateFetchedUser } = useUser(currentUser?.id);
-  const editModal = useEditModal();
+  const { data: currentUser } = useCurrentUser(); // fetch current user data using custom hook
+  const { mutate: mutateFetchedUser } = useUser(currentUser?.id); // fetch user data using custom hook and pass current user ID
+  const editModal = useEditModal(); // initialize edit modal state using custom hook
 
-  const [profileImage, setProfileImage] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [bio, setBio] = useState("");
+  const [profileImage, setProfileImage] = useState(""); // initialize state for profile image
+  const [coverImage, setCoverImage] = useState(""); // initialize state for cover image
+  const [name, setName] = useState(""); // initialize state for name
+  const [username, setUsername] = useState(""); // initialize state for username
+  const [bio, setBio] = useState(""); // initialize state for bio
 
   useEffect(() => {
+    // set initial state values based on current user data
     setProfileImage(currentUser?.profileImage);
     setCoverImage(currentUser?.coverImage);
     setName(currentUser?.name);
@@ -33,27 +34,28 @@ const EditModal = () => {
     currentUser?.coverImage,
   ]);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // initialize loading state
 
   const onSubmit = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true); // set loading state to true
       await axios.patch("/api/edit", {
+        // make PATCH request to edit user data
         name,
         username,
         bio,
         profileImage,
         coverImage,
       });
-      mutateFetchedUser();
+      mutateFetchedUser(); // refetch user data using custom hook
 
-      toast.success("Updated");
-      editModal.onClose();
+      toast.success("Updated"); // show success toast notification
+      editModal.onClose(); // close edit modal
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
+      console.log(error); // log error to console
+      toast.error("Something went wrong"); // show error toast notification
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // set loading state to false
     }
   }, [
     bio,

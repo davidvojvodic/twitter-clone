@@ -1,38 +1,43 @@
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useUser from "@/hooks/useUser";
-import React, { useMemo } from "react";
-import { format } from "date-fns";
-import Button from "../Button";
-import { BiCalendar } from "react-icons/bi";
-import useEditModal from "@/hooks/useEditModal";
-import useFollow from "@/hooks/useFollow";
+import useCurrentUser from "@/hooks/useCurrentUser"; // import custom hook to get current user data
+import useUser from "@/hooks/useUser"; // import custom hook to get user data
+import React, { useMemo } from "react"; // import React and useMemo hook
+import { format } from "date-fns"; // import date-fns library for date formatting
+import Button from "../Button"; // import Button component
+import { BiCalendar } from "react-icons/bi"; // import BiCalendar icon from react-icons library
+import useEditModal from "@/hooks/useEditModal"; // import custom hook to handle edit modal
+import useFollow from "@/hooks/useFollow"; // import custom hook to handle follow/unfollow functionality
 
 interface UserBioProps {
-  userId: string;
+  userId: string; // define prop for user ID
 }
 
 const UserBio: React.FC<UserBioProps> = ({ userId }) => {
-  const { data: currentUser } = useCurrentUser();
-  const { data: fetchedUser } = useUser(userId);
+  // define UserBio component with props
+  const { data: currentUser } = useCurrentUser(); // get current user data using custom hook
+  const { data: fetchedUser } = useUser(userId); // get user data using custom hook
 
-  const editModal = useEditModal();
+  const editModal = useEditModal(); // initialize edit modal using custom hook
 
-  const { isFollowing, toggleFollow } = useFollow(userId);
+  const { isFollowing, toggleFollow } = useFollow(userId); // get follow/unfollow functionality using custom hook
 
   const createdAt = useMemo(() => {
+    // memoize createdAt variable to avoid unnecessary re-renders
     if (!fetchedUser?.createdAt) {
+      // if user creation date is not available, return null
       return null;
     }
 
-    return format(new Date(fetchedUser.createdAt), "MMMM yyyy");
-  }, [fetchedUser?.createdAt]);
+    return format(new Date(fetchedUser.createdAt), "MMMM yyyy"); // format user creation date using date-fns library
+  }, [fetchedUser?.createdAt]); // dependency array for useMemo hook
 
   return (
     <div className="border-b-[1px] border-neutral-800 pb-4">
+      {/* // render user bio component */}
       <div className="flex justify-end p-2">
-        {currentUser?.id === userId ? (
+        {currentUser?.id === userId ? ( // if current user is viewing their own profile, show edit button
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
+          // if current user is viewing someone else's profile, show follow/unfollow button
           <Button
             onClick={toggleFollow}
             label={isFollowing ? "Unfollow" : "Follow"}
@@ -71,4 +76,4 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
   );
 };
 
-export default UserBio;
+export default UserBio; // export UserBio component

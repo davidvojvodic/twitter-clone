@@ -7,8 +7,12 @@ import SidebarTweetBtn from "./SidebarTweetBtn";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
 
+// Define the Sidebar component
 const Sidebar = () => {
+  // Get the current user data using the useCurrentUser hook
   const { data: currentUser } = useCurrentUser();
+
+  // Define the sidebar items as an array of objects
   const items = [
     {
       label: "Home",
@@ -30,11 +34,13 @@ const Sidebar = () => {
     },
   ];
 
+  // Render the Sidebar component
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
       <div className="flex flex-col items-end">
         <div className="space-y-2 lg:w-[230px]">
           <SidebarLogo />
+          {/* Render each sidebar item using the SidebarItem component */}
           {items.map((item) => (
             <SidebarItem
               key={item.href}
@@ -45,6 +51,7 @@ const Sidebar = () => {
               alert={item.alert}
             />
           ))}
+          {/* Render the logout button if a user is logged in */}
           {currentUser && (
             <SidebarItem
               onClick={() => signOut()}
@@ -59,4 +66,5 @@ const Sidebar = () => {
   );
 };
 
+// Export the Sidebar component
 export default Sidebar;

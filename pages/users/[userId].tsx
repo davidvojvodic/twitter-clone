@@ -11,8 +11,10 @@ const UserView = () => {
   const router = useRouter();
   const { userId } = router.query;
 
+  // Fetch user data using custom hook
   const { data: fetchedUser, isLoading } = useUser(userId as string);
 
+  // Show loading spinner while data is being fetched
   if (isLoading || !fetchedUser) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -20,6 +22,8 @@ const UserView = () => {
       </div>
     );
   }
+
+  // Render user profile page with fetched data
   return (
     <>
       <Header showBackArrow label={fetchedUser?.name} />

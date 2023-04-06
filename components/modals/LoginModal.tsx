@@ -6,13 +6,16 @@ import useRegisterModal from "@/hooks/useRegisterModal";
 import { signIn } from "next-auth/react";
 
 const LoginModal = () => {
+  // Custom hooks to manage the state of the login and register modals
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
 
+  // State variables for email, password, and loading status
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Function to toggle between login and register modals
   const onToggle = useCallback(() => {
     if (isLoading) {
       return;
@@ -22,6 +25,7 @@ const LoginModal = () => {
     registerModal.onOpen();
   }, [isLoading, registerModal, loginModal]);
 
+  // Function to handle form submission and sign in the user
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -39,6 +43,7 @@ const LoginModal = () => {
     }
   }, [loginModal, email, password]);
 
+  // JSX for the body of the modal, containing input fields for email and password
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
@@ -57,6 +62,7 @@ const LoginModal = () => {
     </div>
   );
 
+  // JSX for the footer of the modal, containing a link to the register modal
   const footerContent = (
     <div className="text-neutral-400 text-center mt-4">
       <p>
@@ -71,6 +77,7 @@ const LoginModal = () => {
     </div>
   );
 
+  // Render the modal component with the appropriate props
   return (
     <Modal
       disabled={isLoading}

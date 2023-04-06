@@ -1,5 +1,6 @@
 import React from "react";
 
+// Define the props that can be passed to the Input component
 interface InputProps {
   placeholder?: string;
   value?: string;
@@ -8,6 +9,7 @@ interface InputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+// Define the Input component as a functional component that takes in the InputProps
 const Input: React.FC<InputProps> = ({
   placeholder,
   value,
@@ -15,6 +17,7 @@ const Input: React.FC<InputProps> = ({
   disabled,
   onChange,
 }) => {
+  // Return an input element with the specified props and styles
   return (
     <input
       disabled={disabled}
@@ -27,4 +30,5 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
+// Export the Input component as the default export of this module
 export default Input;
