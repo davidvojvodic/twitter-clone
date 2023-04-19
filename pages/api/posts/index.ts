@@ -14,7 +14,7 @@ export default async function handler(
   try {
     if (req.method === "POST") {
       // If the request method is POST
-      const { currentUser } = await serverAuth(req); // Authenticate the user using serverAuth middleware
+      const { currentUser } = await serverAuth(req, res); // Authenticate the user using serverAuth middleware
       const { body } = req.body; // Get the post body from the request body
 
       const post = await prisma.post.create({

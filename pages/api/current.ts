@@ -14,13 +14,13 @@ export default async function handler(
 
   try {
     // Call the serverAuth function passing the request object and get the currentUser object from the returned value
-    const { currentUser } = await serverAuth(req);
+    const { currentUser } = await serverAuth(req, res);
 
     // Return a 200 status code and the currentUser object as a JSON response
     return res.status(200).json(currentUser);
   } catch (error) {
     // If an error occurs, log it to the console and return a 400 status code (Bad Request)
     console.log(error);
-    return res.status(400).end();
+    return res.status(200).json(null);
   }
 }

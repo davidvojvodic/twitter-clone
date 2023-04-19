@@ -14,7 +14,7 @@ export default async function handler(
   try {
     const { userId } = req.body; // Extracting userId from request body
 
-    const { currentUser } = await serverAuth(req); // Authenticating user with serverAuth function
+    const { currentUser } = await serverAuth(req, res); // Authenticating user with serverAuth function
 
     if (!userId || typeof userId !== "string") {
       // Checking if userId is a valid string

@@ -12,7 +12,7 @@ export default async function handler(
   }
 
   try {
-    const { currentUser } = await serverAuth(req); // authenticate user using serverAuth function
+    const { currentUser } = await serverAuth(req, res); // authenticate user using serverAuth function
 
     const { name, username, bio, profileImage, coverImage } = req.body; // get user data from request body
 

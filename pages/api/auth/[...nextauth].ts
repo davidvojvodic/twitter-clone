@@ -4,9 +4,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/libs/prismadb";
+import { AuthOptions } from "next-auth";
 
 // Export NextAuth function with configuration options
-export default NextAuth({
+export const authOptions: AuthOptions = {
   // Use PrismaAdapter for session management
   adapter: PrismaAdapter(prisma),
   // Use CredentialsProvider for authentication
@@ -55,8 +56,10 @@ export default NextAuth({
   },
   // Set JWT secret
   jwt: {
-    secret: process.env.NEXTATUH_JWT_SECRET,
+    secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   // Set secret for NextAuth
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+export default NextAuth(authOptions);

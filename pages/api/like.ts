@@ -16,7 +16,7 @@ export default async function handler(
   try {
     // Get the postId from the request body and the currentUser from serverAuth
     const { postId } = req.body;
-    const { currentUser } = await serverAuth(req);
+    const { currentUser } = await serverAuth(req, res);
 
     // Check if the postId is valid
     if (!postId || typeof postId !== "string") {

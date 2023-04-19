@@ -15,7 +15,7 @@ export default async function handler(
 
   try {
     // Authenticate the user making the request
-    const { currentUser } = await serverAuth(req);
+    const { currentUser } = await serverAuth(req, res);
     // Get the comment body and post ID from the request body and query parameters respectively
     const { body } = req.body;
     const { postId } = req.query;
